@@ -1,4 +1,4 @@
-# TP Stack ELKK (Elasticsearch, Logstash, Kafka, Filebeat)
+# TP Stack ELKK (Elasticsearch, Logstash, Kibana, Kafka, Filebeat)
 
 ## Objectifs pédagogiques
 
@@ -94,54 +94,68 @@ flowchart LR
   - Générer 10k–100k messages avec un script producer ou `kcat -P`.
   - Stopper Logstash pour observer le buffering Kafka, puis relancer.
   - Surveiller la latence et la taille du backlog.
-  <details>
-    <summary>Spoiler warning</summary>
-    
-    ```bash
-    # Générer rapidement des messages (ici 1000 lignes)
-    seq 1 1000 | docker compose exec -T kafka kafka-console-producer --bootstrap-server kafka:9092 --topic logs-app
+    <details>
+      <summary>Spoiler warning</summary>
+      
+      ```bash
+      # Générer rapidement des messages (ici 1000 lignes)
+      seq 1 1000 | docker compose exec -T kafka kafka-console-producer --bootstrap-server kafka:9092 --topic logs-app
 
     # Voir le backlog et le lag du consumer Logstash
+
     docker compose exec kafka kafka-consumer-groups --bootstrap-server kafka:9092 --group logstash --describe
 
     # Tester la résilience: arrêter puis relancer Logstash
+
     docker compose stop logstash
+
     # ...laisser Filebeat pousser, puis...
+
     docker compose start logstash
+
     ```
     </details>
+    ```
 
 - **06 | Alerting / intégrations**
 
   - Règle Kibana sur `status >= 500` avec action webhook (ou log).
   - Option: exporter les logs vers un second index ou S3-like (simulé).
-  <details>
-    <summary>Spoiler warning</summary>
-    
-    ```bash
-    # Requête pour l’alerte (Discover / Dev Tools)
-    status >= 500 and url.path : "/api/*"
+    <details>
+      <summary>Spoiler warning</summary>
+      
+      ```bash
+      # Requête pour l’alerte (Discover / Dev Tools)
+      status >= 500 and url.path : "/api/*"
 
     # Simuler un webhook local (listener netcat)
+
     nc -l 0.0.0.0 9999 &
+
     # Dans Kibana, configurer l'action webhook vers http://host.docker.internal:9999
+
     ```
     </details>
+    ```
 
 - **07 | Nettoyage**
+
   - `docker compose down -v`.
   - Échanger sur les améliorations (ILM, Fleet, APM, security).
-  <details>
-    <summary>Spoiler warning</summary>
-    
-    ```bash
-    # Arrêt et nettoyage complet
-    docker compose down -v
+    <details>
+      <summary>Spoiler warning</summary>
+      
+      ```bash
+      # Arrêt et nettoyage complet
+      docker compose down -v
 
     # (Option) purge des indices applicatifs
-    curl -XDELETE localhost:9200/app-logs-*
+
+    curl -XDELETE localhost:9200/app-logs-\*
+
     ```
     </details>
+    ```
 
 ## Livrables attendus
 
