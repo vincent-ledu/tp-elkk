@@ -218,6 +218,7 @@ flowchart LR
 - Kibana ready (HTTP 302/200): `curl -I localhost:5601`
 - Ajouter une nouvelle ligne de log (déclenche Filebeat) : `echo '{"@timestamp":"'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'","message":"GET /demo","status":200,"client_ip":"1.1.1.1","service":"web"}' >> samples/logs/app.log`
 
-```
+### Scripts de génération de logs
 
-```
+- Bash (Linux/macOS) : `bash scripts/gen-logs.sh 50 samples/logs/app.log` (paramètre 1 = nombre de lignes, paramètre 2 optionnel = chemin du fichier)
+- PowerShell (Windows) : `pwsh scripts/gen-logs.ps1 -Count 50 -LogFile samples/logs/app.log`
