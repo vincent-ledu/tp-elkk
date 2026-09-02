@@ -8,7 +8,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 
 urls=("/api/orders" "/api/payments" "/health" "/api/users" "/")
 methods=("GET" "POST" "PUT")
-clients=("8.8.8.8" "1.1.1.1" "203.0.113.10" "9.9.9.9")
+clients=("8.8.8.8" "82.64.181.145" "203.0.113.10" "9.9.9.9")
 
 for i in $(seq 1 "$COUNT"); do
   url="${urls[RANDOM % ${#urls[@]}]}"
